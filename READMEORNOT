@@ -1,0 +1,64 @@
+javascript
+// ---- my-irc-bouncer.js
+
+module.exports = {
+    connect()
+    join()
+    disconnect()
+    leave()
+    say();
+}
+
+
+
+
+///--- test.js 
+
+require("my-irc-bouncer");
+
+
+
+
+
+
+
+
+
+
+client = slateIrc.createClient();
+
+function handler(message) {
+    console.log("a message happened!", message);
+}
+client.on("message", handler);
+
+client.say("#freenode", "hello");
+
+
+//------------------------------------------------------------------------------
+
+Pure
+
+pure/modules/irc/irc.js
+
+core = require("../../../core.js")
+bus = core.bus;
+cache = core.cache;
+config = core.config;
+
+let { bus, cache, config } = require("../../../core.js");
+
+bus emits events that come from scrollback.
+
+function stateChangeHandler (changes) {
+    // do stuff when an event happened in scrollback
+}
+
+bus.on("statechange", stateChangeHandler);
+
+client = slateIrc.createClient();
+
+function handler(message) {
+    // do stuff when things happen in IRC.
+}
+client.on("message", handler);
