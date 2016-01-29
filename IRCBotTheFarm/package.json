@@ -1,0 +1,16 @@
+{
+  "name": "ircbotthefarm",
+  "version": "1.0.0",
+  "description": "Meh",
+  "main": "index.js",
+  "dependencies": {
+    "slate-irc": "^0.8.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
+  },
+  "author": "rahulkondi",
+  "license": "MIT"
+}

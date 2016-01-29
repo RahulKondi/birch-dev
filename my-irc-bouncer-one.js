@@ -2,7 +2,7 @@
 //it also expects the export methods to be called in a particular order
 
 // Bouncer module
-var irc = require('slate-irc');
+var irc = require('./IRCBotTheFarm/node_modules/slate-irc');
 var net = require('net');
 var client; //a global variable
 
@@ -17,7 +17,7 @@ console.log("Connected to " + ircStream);
 
 //join accepts args: channel, nick and username -- in this order. Will add arg for 'realname' later, for now it's hardcoded
 var join = function (channel, nickname, username) {
-  client.nick(nickname);
+  irc.nick(nickname);
   client.user(username, 'I iz InternKumar from Scrollback');
   client.join(channel);
   console.log("Joined " + channel + " as " + nickname);
@@ -42,9 +42,9 @@ var disconnect = function (ircStream, message) {
 }
 
 module.exports = {
-    connect()
-    join()
-    disconnect()
-    leave()
-    say();
+    connect,
+    join,
+    disconnect,
+    leave,
+    say
 }

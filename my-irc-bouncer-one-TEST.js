@@ -1,4 +1,4 @@
-var BeBot = require('my-irc-bouncer-one');
+var BeBot = require('./my-irc-bouncer-one');
 
 BeBot.connect("irc.freenode.org");
 BeBot.join('#birch', 'kondi', 'kondirahul');

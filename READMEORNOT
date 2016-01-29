@@ -12,7 +12,7 @@ module.exports = {
 
 
 
-///--- test.js 
+///--- test.js
 
 require("my-irc-bouncer");
 
