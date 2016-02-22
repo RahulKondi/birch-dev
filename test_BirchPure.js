@@ -15,4 +15,7 @@ birch.connectUser({
 });
 
 */
-birch.connectUser('ChachaChaudhary', 'irc.freenode.org', '#birch');
+birch.connectUser({
+  userID : 'ChachaChaudhary',
+  server : 'irc.freenode.org',
+  channel : '#birch'});

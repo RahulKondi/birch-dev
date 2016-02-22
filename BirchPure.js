@@ -6,8 +6,12 @@ var net = require('net');
 var connections = {};
 
 //APIs
-var connectUser = function(userID, server, channel) {
-  var client;
+var connectUser = function(arguments) {
+  var client
+      userID = arguments.userID,
+      server = arguments.server,
+      channel= arguments.channel;
+
   var stream = net.connect({
     port : 6667,
     host : server
