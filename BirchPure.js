@@ -89,7 +89,12 @@ var say = function (arguments, callback) {
 
 //HANDLERS
 var handleMessage = function (message) {
-  console.log("\n@" + message.hostmask.nick + " : " + message.message);
+  if (connections[message.hostmask.nick]) {
+    console.log("delivered");
+  }
+  else {
+    console.log("\n@" + message.hostmask.nick + " : " + message.message);
+  }
 }
 
 //EXPOSING FUCNTIONS
