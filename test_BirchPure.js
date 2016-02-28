@@ -21,9 +21,9 @@ birch.connectBirch({
   channel : '#birch'});
 
 birch.connectUser({
-  userID : 'ABCD',
-  server : 'irc.freenode.org',
-  channel : '#birch'});
+    userID : 'ABCD',
+    server : 'irc.freenode.org',
+    channel : '#birch'});
 
 birch.connectUser({
   userID : 'WXYZ',

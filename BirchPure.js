@@ -4,6 +4,17 @@ var net = require('net');
 
 //Data
 var connections = {};
+/* connections data structure
+connections = {
+  userID = {
+    server = {
+      nickname : ,
+      channels = [],
+      client : client,
+    }
+  }
+}
+*/
 
 //APIs
 var connectBirch = function(arguments) {
@@ -12,9 +23,8 @@ var connectBirch = function(arguments) {
   });
 }
 
-var connectUser = function(arguments) {
-  var client,
-      userID = arguments.userID,
+var connectUser = function(arguments, callback) {
+  var userID = arguments.userID,
       server = arguments.server,
       channel= arguments.channel;
 
@@ -24,38 +34,53 @@ var connectUser = function(arguments) {
   }, function (stream) {
     console.log("Connected to stream : " + server);
   });
-  client = irc(stream);
-  connections[userID] = {};
-  connections[userID][server]= {
-    nickname: userID,
-    client: client,
-    channels: []
-  };
 
-  client.user(userID, "WHOIS");
-  client.nick(userID);
+
+  if (!connections[userID]) {
+    var client = irc(stream);
+    connections[userID] = {};
+    connections[userID][server]= {
+      client: client,
+      channels: []
+    };
+    client.user(userID, "WHOIS");
+
+    client.nick(userID, function (){
+      client.on('data', function (data) {
+        if (data.command === 'ERR_NICKNAMEINUSE') {
+          console.log("[ X ]\tNick in use. Trying : " + userID + "_");
+          client.nick(userID+"_");
+          client.join(channel);
+          connections[userID][server].nickname = userID+"_";
+        }
+        else connections[userID][server].nickname = userID;
+      });
+    });
+  }
+  else {
+    var client = connections[userID][server].client;
+  }
+
   client.join(channel, null, function(){
-    connections[userID][server].channels.push(channel);
-    console.log("Joined channel : " + channel);
+    client.on('data', function (data) {
+      if (data.command == 'RPL_ENDOFNAMES') {
+        //console.log(data);
+        connections[userID][server].channels.push(channel);
+        console.log("Joined channel : " + channel);
+      }
+    });
   });
-
-  client.on('data', function (data) {
-    if (data.command == 'RPL_ENDOFNAMES') {
-    console.log(data);
-  }
-  if (data.command === 'ERR_NICKNAMEINUSE') {
-    console.log("[ X ]\tNick in use. Trying : " + userID + "_");
-    client.nick(userID+"_");
-    client.join(channel);
-    connections[userID][server].nickname = userID+"_";
-  }
-});
+  client.on('message', function (message) {
+    //empty
+  });
+  if (callback) callback(client, new Error("\n[ X ]\tSOME ERROR OCURRED"));
 }//connectUser()
 
-
+//HANDLERS
 var handleMessage = function (message) {
   console.log(message.hostmask.nick + " : " + message.message);
 }
+
 //EXPOSING FUCNTIONS
 module.exports = {
   connectBirch,
