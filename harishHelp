@@ -1,0 +1,32 @@
+bus.on("change", (change) => {
+  for (i in change.entities) {
+    if (change.entities[i].type === Constants.TYPE_TEXT && change.entities[i].createTime === change.entities[i].updateTime) {
+      birch.send(change.entities[i].body);
+    }
+  }
+});
+
+
+bus.on("change", (change) => {
+  for (i in change.entities) {
+    if (change.entities[i].type === Constants.TYPE_TEXT && change.entities[i].createTime === change.entities[i].updateTime) {
+    birch.say(change.entities[i].body);
+    }
+  }
+});
+
+function askdjfn(){
+  bus.emit("change", new Text({
+      id: uuid.v4(),
+      body: text,
+      from: from,
+      createTime: Date.now()
+  }));
+}
+
+function d () {
+bus.emit("change", new Text({
+      id: uuid.v4(),
+      
+})
+}

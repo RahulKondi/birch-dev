@@ -33,9 +33,10 @@ var connectUser = function(arguments, callback) {
     port : 6667,
     host : server
   }, function (stream) {
-    console.log("Connected to stream : " + server);
+    console.log("Connected to stream 1: " + stream);
   });
 
+	console.log("2" + stream);
   if (!connections[userID]) {
     var client = irc(stream);
     connections[userID] = {};
@@ -83,9 +84,26 @@ var say = function (arguments, callback) {
   var client = connections[userID][server].client;
   client.send(channel, message, function () {
   });
-
 } // say()
 
+var part = function (arguments, callback) {
+  var client = connections[arguments.userID][arguments.server].client;
+  client.part(arguments.channel, arguments.message);
+  if (callback) callback();
+} // part()
+
+/* var userAway = function (arguments, callback) {
+  var client = connections[arguments.userID][arguments.server].client;
+  client.away(arguments.message);
+  console.log(connections[arguments.userID][arguments.server]);
+}
+*/
+// NAMES
+var namesList = function (arguments, callback) {
+  var client = connections[arguments.userID][arguments.server].client;
+  var namesInChannel = client.names(arguments.channel);
+  console.log(namesInChannel);
+}
 
 //HANDLERS
 var handleMessage = function (message) {
@@ -94,6 +112,9 @@ var handleMessage = function (message) {
   }
   else {
     console.log("\n@" + message.hostmask.nick + " : " + message.message);
+    client.names(channel, function (error, names){
+      console.log(error);
+    });
   }
 }
 
@@ -101,5 +122,7 @@ var handleMessage = function (message) {
 module.exports = {
   connectBirch,
   connectUser,
-  say
+  say,
+  part,
+  namesList
 }

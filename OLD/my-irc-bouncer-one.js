@@ -7,13 +7,33 @@ var net = require('net');
 var client; //a global variable
 var explicit_list = ['yolo', 'mofo', 'dodo'];
 
+/*
+var conns = {};
+
+
+function connect(username, server, channels) {
+  var conn = irc.createClient(server);
+
+  conns[username] = {
+    server: {
+      conn: conn,
+      channels: channels
+    }
+  };
+}
+
+function join(username, server, channel) {
+  conns[username][server].conn.join(channel);
+  conns[username][server].channels.push(channels);
+}
+*/
+
 // connect receives a variable that specifies the stream to connect to, in this case 'irc.freenode.org'
 var connect = function (ircStream, nickname, username) {
   var stream = net.connect({
     port: 6667,
     host: ircStream
   });
-
   client = irc(stream);
   client.nick(nickname);
   client.user(username, 'I iz InternKumar from Scrollback');
@@ -52,17 +72,26 @@ function handleMessage (message) {
 
 function handleData (msg) {
     console.log(msg);
-
+    var swears = ' ';
     if (msg.command == 'PRIVMSG') {
-      var split_message = msg.trailing.split(' ');
-      for (i in split_message) {
-          if (split_message.indexOf(explicit_list[i]) ) {
+      for (i in explicit_list) {
+          if ((msg.trailing.indexOf(explicit_list[i])) !== -1) {
+              console.log(explicit_list[i]);
               console.log("Somebody swore!");
-              say("#birch", "No swearing mothefucka!");
+              swears = swears + explicit_list[i] + ' ';
+              var swearFlag = 1;
+              continue;
           }
+      }
+      if (swearFlag) {
+        say("#birch", "Swears: " + swears);
       }
     }
 }
+
+
+
+
 
 module.exports = {
     connect,
